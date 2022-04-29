@@ -27,3 +27,4 @@ node {
 
 //Build practice
 //testing purpose
+//scripted pipeline
