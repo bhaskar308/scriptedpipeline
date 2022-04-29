@@ -1,25 +1,23 @@
-node 
-{
-    stage('ContinuousDownload') 
+node {
+    stage('continuousdownload') 
     {
-       git 'https://github.com/MRaju2022/maven.git'
+    git 'https://github.com/MRaju2022/maven.git'
+     }
+     stage('continuousbuild') 
+     {
+    sh 'mvn package'
     }
-    stage('ContinuousBuild') 
+    stage('continuousdeploy')
     {
-       sh 'mvn package'
+    sh 'scp /home/ubuntu/.jenkins/workspace/sriptedproject/webapp/target/webapp.war ubuntu@172.31.40.98:/var/lib/tomcat9/webapps/testenv.war'
     }
-     stage('ContinuousDeployment') 
+    stage('continuoustesting') 
     {
-      sh 'scp /home/ubuntu/.jenkins/workspace/scriptedPipeline/webapp/target/webapp.war  ubuntu@172.31.7.171:/var/lib/tomcat9/webapps/testenv.war'
-    }
-     stage('ContinuousTesting') 
-    {
-       git 'https://github.com/MRaju2022/Testing.git'
-       sh 'java -jar /home/ubuntu/.jenkins/workspace/scriptedPipeline/testing.jar'
-    }
-    stage('ContinuousDelivery') 
-    {
-       sh 'scp /home/ubuntu/.jenkins/workspace/scriptedPipeline/webapp/target/webapp.war  ubuntu@172.31.6.98:/var/lib/tomcat9/webapps/prodenv.war'
-    }
-    
+    git 'https://github.com/MRaju2022/Testing.git'
+    sh 'java -jar /home/ubuntu/.jenkins/workspace/sriptedproject/testing.jar'
 }
+stage('continuousdelivary')
+{
+   sh 'scp /home/ubuntu/.jenkins/workspace/sriptedproject/webapp/target/webapp.war ubuntu@172.31.43.163:/var/lib/tomcat9/webapps/prodenv.war' 
+}
+      } 
